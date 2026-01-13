@@ -55,8 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 **Question**: When does this code run?
 
+If a button is pressed.
+
 **Prediction**: What happens if there’s no saved data?
 
+Edi wala
 
 ---
 
@@ -89,6 +92,7 @@ if (savedFavoriteColor) document.getElementById("favoriteBand").value = savedFav
 
 **Checkpoint**: Type a Band/ Singer, click Save, reload—does it persist?
 
+Yes. (I have like 500 favorite bands atp)
 
 ---
 
@@ -117,6 +121,7 @@ document.getElementById("favoriteBand").value = "";
 
 **Checkpoint**: Save data, then click Clear—only the listed keys should be removed. Confirm in DevTools: `localStorage.length`.
 
+localStorage.length should be zero, but it outputted one since there was data from zb1_zone website.
 
 ---
 
@@ -204,6 +209,8 @@ document.getElementById("clear").onclick = () => {
  Do you see a JSON view of all saved items?
   Clear data and see it update.
 
+It shows a JSON view (an object?) of all saved items. I fiddled with the zb1_zone, but the data I put in localStorage there can be seen.
+
 ---
 
 
@@ -234,6 +241,7 @@ if (savedProfile) {
 
 * **Checkpoint**: Confirm localStorage.getItem("profile") is a JSON string. Reload—does the form populate from the object?
 
+Yes.
 
 ---
 
@@ -253,12 +261,15 @@ localStorage.setItem("name", nameValue);
 
 * **Checkpoint**: Try saving with an empty name—does the status message guide you?
 
+The status updates to *"Please enter your name before saving."*
 
 ---
 
 ## Challenge: incognito and quota awareness
 
 * Incognito test: Open the page in incognito/private mode. Save data, close the tab, reopen—does it persist? Discuss why behavior may differ.
+
+It only persists when reloading or reopening the same page without closing the original tab. It does not keep the data in localStorage when closing the tab.
 
 * Quota test (optional): Try saving a very large string (e.g., repeat "x" many times) and catch errors:
 
@@ -280,12 +291,15 @@ You may search, study, and give short answers in your own words:
 
 1. Definition: What is localStorage used for?
 
-localStorage is used for small
+localStorage is used for small data storage that can only be accessed in the user's own browser.
 
 2. Security: Why shouldn’t you store passwords or tokens in localStorage?
 
+Passwords can be retrieved in localStorage with cross-site scripting making them vulnerable (also they are not encrypted).
+
 3. Scope: What does “scoped to origin” mean?
 
+localStorage data remains in the origin and can only be accessed with the same properties as the origin.
 
 ---
 

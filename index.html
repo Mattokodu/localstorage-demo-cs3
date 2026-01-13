@@ -114,6 +114,8 @@
     if (savedName) document.getElementById("name").value = savedName;
     document.getElementById("theme").value = savedTheme;
 
+    
+
     applyTheme(savedTheme);
 
     if (savedName || savedTheme) {
@@ -151,6 +153,13 @@
 
     // SAVE BUTTON 
     document.getElementById("save").onclick = () => {
+        const nameValue = document.getElementById("name").value.trim();
+        if (!nameValue) {
+        document.getElementById("status").textContent = "Please enter your name before saving.";
+        return;
+        }
+        localStorage.setItem("name", nameValue);
+
         localStorage.setItem("name", document.getElementById("name").value);
         const themeValue = document.getElementById("theme").value;
         localStorage.setItem("theme", themeValue);
