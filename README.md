@@ -280,6 +280,8 @@ You may search, study, and give short answers in your own words:
 
 1. Definition: What is localStorage used for?
 
+localStorage is used for small
+
 2. Security: Why shouldn’t you store passwords or tokens in localStorage?
 
 3. Scope: What does “scoped to origin” mean?

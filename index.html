@@ -60,6 +60,13 @@
             </div>
 
             <div class="field">
+                <label class="label">Favorite Band/ Singer</label>
+                <div class="control">
+                  <input id="favoriteBand" class="input" type="text" placeholder="e.g., Itchyworms">
+                </div>
+            </div>
+
+            <div class="field">
                 <label class="label">Theme</label>
                 <div class="control">
                     <div class="select">
@@ -69,6 +76,11 @@
                         </select>
                     </div>
                 </div>
+            </div>
+
+            <div class="box mt-4">
+                <h3 class="title is-5">Saved data</h3>
+                <pre id="dump"></pre>
             </div>
 
             <div class="buttons">
@@ -95,6 +107,9 @@
   document.addEventListener("DOMContentLoaded", function() {
     const savedName = localStorage.getItem("name");
     const savedTheme = localStorage.getItem("theme") || "light";
+    const savedFavoriteBand = localStorage.getItem("favoriteBand");
+
+    if (savedFavoriteBand) document.getElementById("favoriteBand").value = savedFavoriteBand;
 
     if (savedName) document.getElementById("name").value = savedName;
     document.getElementById("theme").value = savedTheme;
@@ -103,6 +118,14 @@
 
     if (savedName || savedTheme) {
       document.getElementById("status").textContent = "Loaded saved data from localStorage!";
+    }
+
+    const savedProfile = localStorage.getItem("profile");
+    if (savedProfile) {
+        const p = JSON.parse(savedProfile);
+        document.getElementById("name").value = p.name || "";
+        document.getElementById("theme").value = p.theme || "light";
+        document.getElementById("favoriteBand").value = p.favoriteBand || "";
     }
   });
 
@@ -114,23 +137,50 @@
         document.getElementById("status").textContent = "Theme changed.";
     });
 
-  // Save button
-  document.getElementById("save").onclick = function() {
-    localStorage.setItem("name", document.getElementById("name").value);
-    const themeValue = document.getElementById("theme").value;
-    localStorage.setItem("theme", themeValue);
-    applyTheme(themeValue);
-    document.getElementById("status").textContent = "Data saved! Reload the page to see persistence.";
-  };
+    // render LocalStorage
+    function renderDump() {
+        const dump = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            dump[key] = localStorage.getItem(key);
+        }
+        document.getElementById("dump").textContent = JSON.stringify(dump, null, 2);
+    }
 
-  // Clear button
-  document.getElementById("clear").onclick = function() {
-    localStorage.clear();
-    document.getElementById("name").value = "";
-    document.getElementById("theme").value = "light";
-    applyTheme("light");
-    document.getElementById("status").textContent = "localStorage cleared!";
-  };
+    document.addEventListener("DOMContentLoaded", renderDump);
+
+    // SAVE BUTTON 
+    document.getElementById("save").onclick = () => {
+        localStorage.setItem("name", document.getElementById("name").value);
+        const themeValue = document.getElementById("theme").value;
+        localStorage.setItem("theme", themeValue);
+        applyTheme(themeValue);
+        localStorage.setItem("favoriteBand", document.getElementById("favoriteBand").value);
+
+        const profile = {
+            name: document.getElementById("name").value,
+            theme: document.getElementById("theme").value,
+            favoriteColor: document.getElementById("favoriteBand").value
+        };
+        localStorage.setItem("profile", JSON.stringify(profile));
+        
+        document.getElementById("status").textContent = "Data saved! Reload the page to see persistence.";
+        renderDump();
+    };
+
+    // clear button
+    document.getElementById("clear").onclick = () => {
+        localStorage.removeItem("name");
+        localStorage.removeItem("theme");
+        localStorage.removeItem("favoriteBand");
+        document.getElementById("status").textContent = "Removed specific items from localStorage!";
+        document.getElementById("name").value = "";
+        document.getElementById("theme").value = "light";
+        document.getElementById("favoriteBand").value = "";
+        applyTheme(document.getElementById("theme").value);
+        renderDump();
+    };
+
 </script>
 
 </body>
